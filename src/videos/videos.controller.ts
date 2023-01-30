@@ -1,14 +1,22 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { CreateVideoInput, CreateVideoOutput } from './dto/create-videos.dto';
+import { GetVideosOutput } from './dto/get-videos.dto';
+import { Video } from './entities/videos.entity';
+import { VideosService } from './videos.service';
 
 @Controller('videos')
 export class VideosController {
+  constructor(private readonly videosService: VideosService) {}
   @Get()
-  findAll() {
-    return 'This action returns all videos';
+  findAll(): Promise<GetVideosOutput> {
+    return this.videosService.findAll();
   }
 
-  @Post('/sad')
-  create() {
-    return 'This action adds a new video';
+  @Post('/create')
+  create(
+    @Body() createVideoInput: CreateVideoInput,
+  ): Promise<CreateVideoOutput> {
+    // return 'This action adds a new video';
+    return this.videosService.createVideo(createVideoInput);
   }
 }

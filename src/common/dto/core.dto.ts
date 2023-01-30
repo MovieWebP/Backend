@@ -1,4 +1,4 @@
 export class CoreOutput {
-  ok: boolean;
+  ok?: boolean;
   error?: string;
 }
