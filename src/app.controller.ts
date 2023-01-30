@@ -10,7 +10,7 @@ export class AppController {
   @Get('hello')
   @Render('index')
   getHello2() {
-    return { message: 'jeungei' };
+    return { message: '인턴' };
     // return 'Hello World!';
   }
 }
