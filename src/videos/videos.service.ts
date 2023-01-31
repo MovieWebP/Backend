@@ -4,6 +4,7 @@ import { Video } from './entities/videos.entity';
 import { Repository } from 'typeorm';
 import { CreateVideoInput, CreateVideoOutput } from './dto/create-videos.dto';
 import { GetVideosOutput } from './dto/get-videos.dto';
+import { GetVideoInput, GetVideoOutput } from './dto/get-video.dto';
 
 @Injectable()
 export class VideosService {
@@ -54,6 +55,32 @@ export class VideosService {
       return {
         ok: false,
         error: 'Could not get videos',
+      };
+    }
+  }
+
+  async getVideo({ movieId }: GetVideoInput): Promise<GetVideoOutput> {
+    try {
+      const video = await this.videos.findOne({
+        where: { movieId: movieId },
+      });
+      if (!video) {
+        return {
+          ok: false,
+          error: 'No video found',
+        };
+      }
+      const message = video.title;
+      return {
+        ok: true,
+        message: message,
+        video: video,
+      };
+    } catch (err) {
+      console.log(err);
+      return {
+        ok: false,
+        error: 'Could not get video',
       };
     }
   }

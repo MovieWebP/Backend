@@ -38,7 +38,9 @@ import { VideosModule } from './videos/videos.module';
     }),
     VideosModule,
   ],
-  controllers: [AppController],
+  controllers: [
+    // AppController,
+  ],
   providers: [],
 })
 export class AppModule {}
