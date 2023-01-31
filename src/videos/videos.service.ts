@@ -65,6 +65,7 @@ export class VideosService {
         where: { movieId: movieId },
       });
       if (!video) {
+        console.log('No video found');
         return {
           ok: false,
           error: 'No video found',
