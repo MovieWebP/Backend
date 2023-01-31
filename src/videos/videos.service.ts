@@ -59,7 +59,7 @@ export class VideosService {
     }
   }
 
-  async getVideo({ movieId }: GetVideoInput): Promise<GetVideoOutput> {
+  async getVideo({ movieId }: GetVideoInput) {
     try {
       const video = await this.videos.findOne({
         where: { movieId: movieId },
@@ -72,11 +72,7 @@ export class VideosService {
         };
       }
       const message = video.title;
-      return {
-        ok: true,
-        message: message,
-        video: video,
-      };
+      return message;
     } catch (err) {
       console.log(err);
       return {

@@ -21,10 +21,10 @@ export class VideosController {
     return this.videosService.createVideo(createVideoInput);
   }
 
-  @Post()
-  // @Render('index') // 해석하면
-  getVideo(@Body() getVideoInput: GetVideoInput): Promise<GetVideoOutput> {
-    return this.videosService.getVideo(getVideoInput);
+  @Get()
+  @Render('index') // 해석하면
+  getVideo() {
+    return { title: 'intern', id: 257211 };
   }
 
   // @Get(id:s
