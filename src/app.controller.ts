@@ -4,6 +4,7 @@ import { Controller, Get, Render } from '@nestjs/common';
 export class AppController {
   @Get()
   getHello() {
+    // console.log('Hello World!');
     return 'Hello World!';
   }
 

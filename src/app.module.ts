@@ -10,9 +10,9 @@ import { VideosModule } from './videos/videos.module';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'views'),
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', 'views'),
+    // }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env.test',
@@ -38,9 +38,7 @@ import { VideosModule } from './videos/videos.module';
     }),
     VideosModule,
   ],
-  controllers: [
-    // AppController,
-  ],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}

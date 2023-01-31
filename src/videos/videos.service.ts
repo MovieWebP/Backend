@@ -59,13 +59,12 @@ export class VideosService {
     }
   }
 
-  async getVideo({ movieId }: GetVideoInput): Promise<GetVideoOutput> {
+  async getVideo({ movieId }: GetVideoInput) {
     try {
       const video = await this.videos.findOne({
         where: { movieId: movieId },
       });
       if (!video) {
-        console.log('No video found');
         return {
           ok: false,
           error: 'No video found',

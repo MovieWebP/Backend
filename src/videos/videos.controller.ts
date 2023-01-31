@@ -15,9 +15,9 @@ import { GetVideosOutput } from './dto/get-videos.dto';
 import { Video } from './entities/videos.entity';
 import { VideosService } from './videos.service';
 
-@Controller('videos')
+@Controller('video')
 export class VideosController {
-  constructor(private readonly videosService: VideosService) { }
+  constructor(private readonly videosService: VideosService) {}
   @Get('/all')
   findAll(): Promise<GetVideosOutput> {
     return this.videosService.findAll();
@@ -46,13 +46,25 @@ export class VideosController {
   @Post('/get')
   async getVideo(@Body() getVideoInput: GetVideoInput, @Res() res: Response) {
     const reply = await this.videosService.getVideo(getVideoInput);
-    return res.redirect(`/videos/${reply.title}/${reply.movieId}`);
+    if (reply.title !== undefined && reply.movieId !== undefined) {
+      return res.redirect(`/video/movie/${reply.title}/${reply.movieId}`);
+    } else {
+      return res.redirect(`/video/error/`);
+    }
   }
 
-  @Get('/:title/:id')
+  @Get('/movie/:title/:id')
   @Render('index')
   playVideo(@Param('title') title: string, @Param('id') id: number) {
-    // this.videosService.playVideo();
-    return { title: 'jeungei', id: 843794 };
+    // console.log(typeof id)
+    return { title: title, id: id };
+  }
+
+  @Get('/error')
+  error() {
+    return {
+      ok: false,
+      error: 'No video found',
+    };
   }
 }
