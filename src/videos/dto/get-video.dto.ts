@@ -10,10 +10,9 @@ export class GetVideoInput {
 }
 
 export class GetVideoOutput extends CoreOutput {
-  @IsString()
   @ApiProperty({ type: String })
-  message?: string;
+  title?: string;
 
-  @ApiProperty({ type: Video })
-  video?: Video;
+  @ApiProperty({ type: Number })
+  movieId?: number;
 }

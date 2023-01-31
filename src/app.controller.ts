@@ -7,10 +7,10 @@ export class AppController {
     return 'Hello World!';
   }
 
-  @Get('hello')
+  @Get('/hello')
   @Render('index')
-  getHello2() {
-    return { message: 'intern' };
-    // return 'Hello World!';
+  playVideo() {
+    // this.videosService.playVideo();
+    return { title: 'jeungei', id: 843794 };
   }
 }
