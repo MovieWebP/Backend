@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateVideoInput, CreateVideoOutput } from './dto/create-videos.dto';
 import { GetVideosOutput } from './dto/get-videos.dto';
 import { GetVideoInput, GetVideoOutput } from './dto/get-video.dto';
+import { UpdateVideoInput, UpdateVideoOutput } from './dto/update-video.dto';
 
 @Injectable()
 export class VideosService {
@@ -43,11 +44,66 @@ export class VideosService {
     }
   }
 
+  async getVideo({ videoId }: GetVideoInput): Promise<GetVideoOutput> {
+    try {
+      const video = await this.videos.findOne({
+        where: { id: videoId },
+      });
+      if (!video) {
+        return {
+          ok: false,
+          error: 'Video not found',
+        };
+      }
+
+      return {
+        ok: true,
+        video: video,
+      };
+    } catch (err) {
+      console.log(err);
+      return {
+        ok: false,
+        error: 'Could not get video',
+      };
+    }
+  }
+
+  async updateVideo(
+    updateVideoInput: UpdateVideoInput,
+  ): Promise<UpdateVideoOutput> {
+    try {
+      const video = await this.videos.findOne({
+        where: { id: updateVideoInput.videoId },
+      });
+      if (!video) {
+        return {
+          ok: false,
+          error: 'Video not found',
+        };
+      }
+      await this.videos.save([
+        {
+          id: updateVideoInput.videoId, // 여기에 videoId를 안넣어주면 새로운 id가 생성됨
+          ...updateVideoInput,
+        },
+      ]);
+      return {
+        ok: true,
+      };
+    } catch (err) {
+      console.log(err);
+      return {
+        ok: false,
+        error: 'Could not update video',
+      };
+    }
+  }
+
   async findAll(): Promise<GetVideosOutput> {
     try {
       const videos = await this.videos.find();
       return {
-        // ok: true,
         videos: videos,
       };
     } catch (err) {
@@ -55,34 +111,6 @@ export class VideosService {
       return {
         ok: false,
         error: 'Could not get videos',
-      };
-    }
-  }
-
-  async getVideo({ movieId }: GetVideoInput) {
-    try {
-      const video = await this.videos.findOne({
-        where: { movieId: movieId },
-      });
-      if (!video) {
-        return {
-          ok: false,
-          error: 'No video found',
-        };
-      }
-      const title = video.title;
-      const id = video.movieId;
-
-      return {
-        ok: true,
-        title: title,
-        movieId: id,
-      };
-    } catch (err) {
-      console.log(err);
-      return {
-        ok: false,
-        error: 'Could not get video',
       };
     }
   }

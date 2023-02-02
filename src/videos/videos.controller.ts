@@ -12,6 +12,7 @@ import { Response } from 'express';
 import { CreateVideoInput, CreateVideoOutput } from './dto/create-videos.dto';
 import { GetVideoInput, GetVideoOutput } from './dto/get-video.dto';
 import { GetVideosOutput } from './dto/get-videos.dto';
+import { UpdateVideoInput, UpdateVideoOutput } from './dto/update-video.dto';
 import { Video } from './entities/videos.entity';
 import { VideosService } from './videos.service';
 
@@ -33,34 +34,37 @@ export class VideosController {
 
   @Post('/update')
   update(
-    @Body() createVideoInput: CreateVideoInput,
-  ): Promise<CreateVideoOutput> {
+    @Body() updateVideoInput: UpdateVideoInput,
+  ): Promise<UpdateVideoOutput> {
     // return 'This action adds a new video';
-    return this.videosService.createVideo(createVideoInput);
+    return this.videosService.updateVideo(updateVideoInput);
   }
 
   @Post('/get')
-  async getVideo(@Body() getVideoInput: GetVideoInput, @Res() res: Response) {
-    const reply = await this.videosService.getVideo(getVideoInput);
-    if (reply.title !== undefined && reply.movieId !== undefined) {
-      return res.redirect(`/video/movie/${reply.title}/${reply.movieId}`);
-    } else {
-      return res.redirect(`/video/error/`);
-    }
+  async getVideo(
+    @Body() getVideoInput: GetVideoInput,
+    // @Res() res: Response,
+  ): Promise<GetVideoOutput> {
+    // const reply = await ;
+    // if (reply.title !== undefined && reply.movieId !== undefined) {
+    //   return res.redirect(`/video/movie/${reply.title}/${reply.movieId}`);
+    // } else {
+    //   return res.redirect(`/video/error/`);
+    // }
+    return this.videosService.getVideo(getVideoInput);
   }
 
-  @Get('/movie/:title/:id')
-  @Render('index')
-  playVideo(@Param('title') title: string, @Param('id') id: number) {
-    // console.log(typeof id)
-    return { title: title, id: id };
-  }
-
-  @Get('/error')
-  error() {
-    return {
-      ok: false,
-      error: 'No video found',
-    };
-  }
+  // @Get('/movie/:title/:id')
+  // @Render('index')
+  // playVideo(@Param('title') title: string, @Param('id') id: number) {
+  //   // console.log(typeof id)
+  //   return { title: title, id: id };
+  // }
+  // @Get('/error')
+  // error() {
+  //   return {
+  //     ok: false,
+  //     error: 'No video found',
+  //   };
+  // }
 }
