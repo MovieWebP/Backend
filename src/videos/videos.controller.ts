@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { CreateVideoInput, CreateVideoOutput } from './dto/create-videos.dto';
+import { DeleteVideoInput, DeleteVideoOutput } from './dto/delete-video.dto';
 import { GetVideoInput, GetVideoOutput } from './dto/get-video.dto';
 import { GetVideosOutput } from './dto/get-videos.dto';
 import { UpdateVideoInput, UpdateVideoOutput } from './dto/update-video.dto';
@@ -38,6 +39,13 @@ export class VideosController {
   ): Promise<UpdateVideoOutput> {
     // return 'This action adds a new video';
     return this.videosService.updateVideo(updateVideoInput);
+  }
+
+  @Post('/delete')
+  delete(
+    @Body() deleteVideoInput: DeleteVideoInput,
+  ): Promise<DeleteVideoOutput> {
+    return this.videosService.deleteVideo(deleteVideoInput);
   }
 
   @Post('/get')

@@ -6,6 +6,7 @@ import { CreateVideoInput, CreateVideoOutput } from './dto/create-videos.dto';
 import { GetVideosOutput } from './dto/get-videos.dto';
 import { GetVideoInput, GetVideoOutput } from './dto/get-video.dto';
 import { UpdateVideoInput, UpdateVideoOutput } from './dto/update-video.dto';
+import { DeleteVideoInput, DeleteVideoOutput } from './dto/delete-video.dto';
 
 @Injectable()
 export class VideosService {
@@ -13,14 +14,12 @@ export class VideosService {
     @InjectRepository(Video) private readonly videos: Repository<Video>,
   ) {}
 
-  async createVideo({
-    title,
-    url,
-    movieId,
-  }: CreateVideoInput): Promise<CreateVideoOutput> {
+  async createVideo(
+    createVideoInput: CreateVideoInput,
+  ): Promise<CreateVideoOutput> {
     try {
       const exits = await this.videos.findOne({
-        where: { movieId: movieId },
+        where: { movieId: createVideoInput.movieId },
       });
       if (exits) {
         return {
@@ -29,7 +28,7 @@ export class VideosService {
         };
       }
       const video = await this.videos.save(
-        this.videos.create({ title, url, movieId }),
+        this.videos.create(createVideoInput),
       );
       return {
         ok: true,
@@ -96,6 +95,30 @@ export class VideosService {
       return {
         ok: false,
         error: 'Could not update video',
+      };
+    }
+  }
+
+  async deleteVideo({ videoId }: DeleteVideoInput): Promise<DeleteVideoOutput> {
+    try {
+      const video = await this.videos.findOne({
+        where: { id: videoId },
+      });
+      if (!video) {
+        return {
+          ok: false,
+          error: 'Video not found',
+        };
+      }
+      await this.videos.delete(videoId);
+      return {
+        ok: true,
+      };
+    } catch (err) {
+      console.log(err);
+      return {
+        ok: false,
+        error: 'Could not delete video',
       };
     }
   }
