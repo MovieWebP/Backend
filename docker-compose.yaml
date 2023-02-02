@@ -1,0 +1,33 @@
+version: "8.0.31"
+
+networks: # 해석하면 app-tier라는 이름의 네트워크를 만들고, 그 네트워크에는 db와 backend가 연결되어 있다.
+  app-tier: # 네트워크 이름
+    driver: bridge # 네트워크 드라이버
+
+services:
+  db:
+    image: mysql 
+    command: --default-authentication-plugin=mysql_native_password 
+    restart: always 
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"    
+    networks:
+      - app-tier      
+    environment:
+      MYSQL_DATABASE: video 
+      MYSQL_ALLOW_EMPTY_PASSWORD: ok #
+      MYSQL_ROOT_PASSWORD: root #
+      MYSQL_USER: dbuser # 해석하면 
+      MYSQL_PASSWORD: dbuser 
+      MYSQL_ROOT_HOST: '%' # 해석해보면 
+  backend:
+    depends_on:
+      - db
+    build: .
+    command: bash -c 'while !</dev/tcp/db/3306; do sleep 1; done; npm run start:dev'
+    ports:
+      - "3000:3000"
+    networks:
+      - app-tier 
