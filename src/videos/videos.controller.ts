@@ -31,17 +31,13 @@ export class VideosController {
     return this.videosService.createVideo(createVideoInput);
   }
 
-  // @Post(':id/edit')
-  // @Render(ViewsPath.ReplyEdit)
-  // @UseGuards(new UserGuard())
-  // async update(
-  //  @Param('id') id: string,
-  //  @Body() update: UpdateDto,
-  //  @Res() res: Response,
-  // ) {
-  //  const reply = await this.replyService.update(id, update);
-  //  res.redirect(`/topic/${reply.topic_id}#${reply.id}`);
-  // }
+  @Post('/update')
+  update(
+    @Body() createVideoInput: CreateVideoInput,
+  ): Promise<CreateVideoOutput> {
+    // return 'This action adds a new video';
+    return this.videosService.createVideo(createVideoInput);
+  }
 
   @Post('/get')
   async getVideo(@Body() getVideoInput: GetVideoInput, @Res() res: Response) {
