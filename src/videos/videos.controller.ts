@@ -1,28 +1,18 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Redirect,
-  Render,
-  Res,
-} from '@nestjs/common';
-import { Response } from 'express';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateVideoInput, CreateVideoOutput } from './dto/create-videos.dto';
 import { DeleteVideoInput, DeleteVideoOutput } from './dto/delete-video.dto';
-import { GetVideoInput, GetVideoOutput } from './dto/get-video.dto';
-import { GetVideosOutput } from './dto/get-videos.dto';
 import { UpdateVideoInput, UpdateVideoOutput } from './dto/update-video.dto';
-import { Video } from './entities/videos.entity';
+import { VideoInput, VideoOutput } from './dto/video.dto';
+import { VideosOutput } from './dto/videos.dto';
 import { VideosService } from './videos.service';
 
 @Controller('video')
 export class VideosController {
   constructor(private readonly videosService: VideosService) {}
-  @Get('/all')
-  findAll(): Promise<GetVideosOutput> {
-    return this.videosService.findAll();
+
+  @Get('/all/:page')
+  async getVideos(@Param('page') page: number): Promise<VideosOutput> {
+    return this.videosService.getVideos(page);
   }
 
   @Post('/create')
@@ -50,16 +40,16 @@ export class VideosController {
 
   @Post('/get')
   async getVideo(
-    @Body() getVideoInput: GetVideoInput,
+    @Body() videoInput: VideoInput,
     // @Res() res: Response,
-  ): Promise<GetVideoOutput> {
+  ): Promise<VideoOutput> {
     // const reply = await ;
     // if (reply.title !== undefined && reply.movieId !== undefined) {
     //   return res.redirect(`/video/movie/${reply.title}/${reply.movieId}`);
     // } else {
     //   return res.redirect(`/video/error/`);
     // }
-    return this.videosService.getVideo(getVideoInput);
+    return this.videosService.getVideo(videoInput);
   }
 
   // @Get('/movie/:title/:id')

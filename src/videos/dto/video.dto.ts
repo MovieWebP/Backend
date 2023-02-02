@@ -3,13 +3,13 @@ import { IsNumber, IsString } from 'class-validator';
 import { CoreOutput } from 'src/common/dto/core.dto';
 import { Video } from '../entities/videos.entity';
 
-export class GetVideoInput {
+export class VideoInput {
   @ApiProperty({ type: Number })
   @IsNumber()
   videoId: number;
 }
 
-export class GetVideoOutput extends CoreOutput {
+export class VideoOutput extends CoreOutput {
   @ApiProperty({ type: Video })
   video?: Video;
 }

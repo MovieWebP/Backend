@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { Video } from './entities/videos.entity';
 import { Repository } from 'typeorm';
 import { CreateVideoInput, CreateVideoOutput } from './dto/create-videos.dto';
-import { GetVideosOutput } from './dto/get-videos.dto';
-import { GetVideoInput, GetVideoOutput } from './dto/get-video.dto';
+import { VideosOutput } from './dto/videos.dto';
+import { VideoInput, VideoOutput } from './dto/video.dto';
 import { UpdateVideoInput, UpdateVideoOutput } from './dto/update-video.dto';
 import { DeleteVideoInput, DeleteVideoOutput } from './dto/delete-video.dto';
 
@@ -43,7 +43,7 @@ export class VideosService {
     }
   }
 
-  async getVideo({ videoId }: GetVideoInput): Promise<GetVideoOutput> {
+  async getVideo({ videoId }: VideoInput): Promise<VideoOutput> {
     try {
       const video = await this.videos.findOne({
         where: { id: videoId },
@@ -84,7 +84,7 @@ export class VideosService {
       await this.videos.save([
         {
           id: updateVideoInput.videoId, // 여기에 videoId를 안넣어주면 새로운 id가 생성됨
-          ...updateVideoInput,
+          ...updateVideoInput, // 해석하면
         },
       ]);
       return {
@@ -123,11 +123,17 @@ export class VideosService {
     }
   }
 
-  async findAll(): Promise<GetVideosOutput> {
+  async getVideos(page: number): Promise<VideosOutput> {
     try {
-      const videos = await this.videos.find();
+      const [videos, totalResults] = await this.videos.findAndCount({
+        take: 25,
+        skip: (page - 1) * 25,
+      });
       return {
-        videos: videos,
+        ok: true,
+        results: videos,
+        totalResults: totalResults,
+        totalPages: Math.ceil(totalResults / 25),
       };
     } catch (err) {
       console.log(err);
