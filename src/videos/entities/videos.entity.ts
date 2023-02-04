@@ -11,6 +11,7 @@ export class Video {
   @IsString()
   @ApiProperty({
     type: String,
+    // url = http://127.0.0.1:3005/video/movie/ + movieId + / + title
     description: 'url of movie video',
   })
   url: string;
@@ -30,4 +31,12 @@ export class Video {
     description: 'id of movie video',
   })
   movieId: number;
+
+  @Column()
+  @IsString()
+  @ApiProperty({
+    type: String,
+    description: 'image path of movie video',
+  })
+  backdrop_path: string;
 }
