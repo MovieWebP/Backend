@@ -22,7 +22,7 @@ export class VideosService {
         where: { movieId: createVideoInput.movieId },
       });
       if (exits) {
-        console.log(exits.movieId, 'exits movieId'); 
+        console.log(exits.movieId, 'exits movieId');
         return {
           ok: false,
           error: 'Already exists',
